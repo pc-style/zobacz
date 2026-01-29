@@ -6,7 +6,6 @@ import AdminPanel from "./pages/AdminPanel";
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const seed = useMutation(api.pages.seed);
 
   useEffect(() => {
@@ -25,13 +24,7 @@ export default function App() {
   };
 
   if (currentPath === "/admin") {
-    return (
-      <AdminPanel
-        isAuthenticated={isAuthenticated}
-        onAuthenticate={() => setIsAuthenticated(true)}
-        onNavigate={navigate}
-      />
-    );
+    return <AdminPanel onNavigate={navigate} />;
   }
 
   const slug = currentPath.replace("/", "") || null;

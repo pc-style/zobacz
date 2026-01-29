@@ -2,18 +2,14 @@ import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
+import { useAuth } from "../hooks/useAuth";
 
 interface AdminPanelProps {
-  isAuthenticated: boolean;
-  onAuthenticate: () => void;
   onNavigate: (path: string) => void;
 }
 
-export default function AdminPanel({
-  isAuthenticated,
-  onAuthenticate,
-  onNavigate,
-}: AdminPanelProps) {
+export default function AdminPanel({ onNavigate }: AdminPanelProps) {
+  const { isAuthenticated, isLoading, user, login, logout } = useAuth();
   const pages = useQuery(api.pages.list);
   const createPage = useMutation(api.pages.create);
   const updatePage = useMutation(api.pages.update);
@@ -31,19 +27,35 @@ export default function AdminPanel({
     deeplinkLabel: "",
   });
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6">
         <div className="glass rounded-3xl p-8 max-w-md w-full text-center">
-          <h1 className="font-display text-3xl text-white mb-6">Panel Admina</h1>
+          <h1 className="font-display text-3xl text-white mb-6">
+            Panel Admina
+          </h1>
           <p className="text-white/50 mb-8 text-sm">
-            (authentication mock - will be replaced with real auth)
+            Zaloguj sie przez auth.pcstyle.dev
           </p>
           <button
-            onClick={onAuthenticate}
+            onClick={login}
             className="w-full glass rounded-xl px-6 py-4 text-white hover:bg-white/10 transition-colors font-display text-lg"
           >
-            Authenticate
+            Zaloguj sie
+          </button>
+          <button
+            onClick={() => onNavigate("/")}
+            className="mt-4 text-white/30 hover:text-white/50 text-sm transition-colors"
+          >
+            Wroc do strony
           </button>
         </div>
       </div>
@@ -110,13 +122,26 @@ export default function AdminPanel({
     <div className="min-h-screen p-6">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="font-display text-3xl text-white">Panel Admina</h1>
-          <button
-            onClick={() => onNavigate("/")}
-            className="glass rounded-xl px-4 py-2 text-white/60 hover:text-white text-sm transition-colors"
-          >
-            Wroc do strony
-          </button>
+          <div>
+            <h1 className="font-display text-3xl text-white">Panel Admina</h1>
+            {user?.email && (
+              <p className="text-white/40 text-sm mt-1">{user.email}</p>
+            )}
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={logout}
+              className="glass rounded-xl px-4 py-2 text-white/40 hover:text-white text-sm transition-colors"
+            >
+              Wyloguj
+            </button>
+            <button
+              onClick={() => onNavigate("/")}
+              className="glass rounded-xl px-4 py-2 text-white/60 hover:text-white text-sm transition-colors"
+            >
+              Wroc do strony
+            </button>
+          </div>
         </div>
 
         {!showCreate && (
