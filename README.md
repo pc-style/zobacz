@@ -33,19 +33,13 @@ bunx convex dev
 bun dev
 ```
 
-## Deployment
+## Deployment (Vercel)
 
-Deploy Convex:
-```bash
-bunx convex deploy
-```
-
-Build for production:
-```bash
-bun run build
-```
-
-Deploy the `dist/` folder to Vercel, Netlify, or any static hosting.
+1. Push to GitHub
+2. Import project in Vercel
+3. Set **Build Command** to: `npx convex deploy --cmd 'bun run build'`
+4. Add environment variable `CONVEX_DEPLOY_KEY` (get from Convex Dashboard > Project Settings > Generate Production Deploy Key)
+5. Deploy
 
 ## Pre-configured Pages
 
