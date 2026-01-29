@@ -38,6 +38,7 @@ export const create = mutation({
 export const update = mutation({
   args: {
     id: v.id("pages"),
+    slug: v.optional(v.string()),
     title: v.string(),
     description: v.optional(v.string()),
     gifUrl: v.optional(v.string()),
@@ -46,7 +47,7 @@ export const update = mutation({
     deeplinkLabel: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const { id, ...data } = args;
+    const { id, slug: _slug, ...data } = args;
     await ctx.db.patch(id, data);
   },
 });
