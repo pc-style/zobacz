@@ -49,4 +49,4 @@ bun dev
 
 ## Admin Panel
 
-Access at `/admin` and click "Authenticate" (mock auth for now).
+Access `/admin` and authenticate with a passkey through `auth.pcstyle.dev`.
